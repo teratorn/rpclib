@@ -343,6 +343,14 @@ class InteropMisc(ServiceBase):
     def return_invalid_data():
         return 'a'
 
+    @srpc(_body_style='bare', _returns=Integer)
+    def return_bare_simple_body():
+        return 1
+
+    @srpc(_body_style='bare', _returns=[Integer,String])
+    def return_bare_complex_body():
+        return 1,'a'
+
     @srpc(String,
           _public_name="urn:#getCustomMessages",
           _in_message="getCustomMessagesMsgIn",
