@@ -124,8 +124,8 @@ def _produce_output_message(f, func_name, kparams):
                                         members=out_params)
         message.__namespace__ = ns # FIXME: is this necessary?
 
-    else:
-        message = ComplexModel.alias(_out_message_name, ns, _returns)
+    else: # bare
+        message = _returns
 
     return message
 
