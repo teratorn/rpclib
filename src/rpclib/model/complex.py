@@ -257,23 +257,6 @@ class ComplexModelBase(ModelBase):
 
         return ComplexModelMeta(type_name, (ComplexModel, ), cls_dict)
 
-    @staticmethod
-    def alias(type_name, namespace, target):
-        """Return an alias class for the given target class.
-
-        This function is a variation on 'ComplexModel.produce'. The alias will
-        borrow the target's _type_info.
-        """
-
-        cls_dict = {}
-
-        cls_dict['__namespace__'] = namespace
-        cls_dict['__type_name__'] = type_name
-        cls_dict['_type_info'] = getattr(target, '_type_info', ())
-        cls_dict['_target'] = target
-
-        return ComplexModelMeta(type_name, (ClassAlias, ), cls_dict)
-
 class ComplexModel(ComplexModelBase):
     """The general complexType factory. The __call__ method of this class will
     return instances, contrary to primivites where the same call will result in
