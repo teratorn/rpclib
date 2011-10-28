@@ -161,6 +161,7 @@
       <xs:element name="non_nillableResponse" type="tns:non_nillableResponse" />
       <xs:element name="python_exception" type="tns:python_exception" />
       <xs:element name="python_exceptionResponse" type="tns:python_exceptionResponse" />
+      <xs:element name="return_bare_simple_body" type="tns:return_bare_simple_body" />
       <xs:element name="return_binary_data" type="tns:return_binary_data" />
       <xs:element name="return_binary_dataResponse" type="tns:return_binary_dataResponse" />
       <xs:element name="return_invalid_data" type="tns:return_invalid_data" />
@@ -612,6 +613,9 @@
       <xs:complexType name="python_exceptionResponse">
         <xs:sequence />
       </xs:complexType>
+      <xs:complexType name="return_bare_simple_body">
+        <xs:sequence />
+      </xs:complexType>
       <xs:complexType name="return_binary_data">
         <xs:sequence />
       </xs:complexType>
@@ -925,6 +929,9 @@
   <wsdl:message name="huge_numberResponse">
     <wsdl:part element="tns:huge_numberResponse" name="huge_numberResponse" />
   </wsdl:message>
+  <wsdl:message name="integer">
+    <wsdl:part element="xs:integer" name="integer" />
+  </wsdl:message>
   <wsdl:message name="long_string">
     <wsdl:part element="tns:long_string" name="long_string" />
   </wsdl:message>
@@ -948,6 +955,9 @@
   </wsdl:message>
   <wsdl:message name="python_exceptionResponse">
     <wsdl:part element="tns:python_exceptionResponse" name="python_exceptionResponse" />
+  </wsdl:message>
+  <wsdl:message name="return_bare_simple_body">
+    <wsdl:part element="tns:return_bare_simple_body" name="return_bare_simple_body" />
   </wsdl:message>
   <wsdl:message name="return_binary_data">
     <wsdl:part element="tns:return_binary_data" name="return_binary_data" />
@@ -1183,6 +1193,10 @@
     <wsdl:operation name="python_exception" parameterOrder="python_exception">
       <wsdl:input message="tns:python_exception" name="python_exception" />
       <wsdl:output message="tns:python_exceptionResponse" name="python_exceptionResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="return_bare_simple_body" parameterOrder="return_bare_simple_body">
+      <wsdl:input message="tns:return_bare_simple_body" name="return_bare_simple_body" />
+      <wsdl:output message="xs:integer" name="integer" />
     </wsdl:operation>
     <wsdl:operation name="return_binary_data" parameterOrder="return_binary_data">
       <wsdl:input message="tns:return_binary_data" name="return_binary_data" />
@@ -1554,6 +1568,15 @@
         <soap:body use="literal" />
       </wsdl:input>
       <wsdl:output name="python_exceptionResponse">
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="return_bare_simple_body">
+      <soap:operation soapAction="return_bare_simple_body" style="document" />
+      <wsdl:input name="return_bare_simple_body">
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="integer">
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

@@ -328,5 +328,10 @@ class TestSuds(unittest.TestCase):
 
         assert ret == 'test'
 
+    def test_bare_body(self):
+        ret = self.client.service.return_bare_simple_body()
+
+        assert ret == 0
+
 if __name__ == '__main__':
     unittest.main()
