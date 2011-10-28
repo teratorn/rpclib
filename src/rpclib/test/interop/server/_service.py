@@ -347,9 +347,9 @@ class InteropMisc(ServiceBase):
     def return_bare_simple_body():
         return 1
 
-    @srpc(_body_style='bare', _returns=[Integer,String])
-    def return_bare_complex_body():
-        return 1,'a'
+#    @srpc(_body_style='bare', _returns=[Integer,String])
+#    def return_bare_complex_body():
+#        return 1,'a'
 
     @srpc(String,
           _public_name="urn:#getCustomMessages",

@@ -117,6 +117,9 @@ def _produce_output_message(f, func_name, kparams):
 
             out_params[_out_variable_name] = _returns
 
+    elif _returns and _body_style == 'bare' and isinstance(_returns, (list, tuple)):
+        raise Exception("You can't have a bare request body with multiple response types")
+
     ns = DEFAULT_NS
     if _out_message_name.startswith("{"):
         ns = _out_message_name[1:].partition("}")[0]
