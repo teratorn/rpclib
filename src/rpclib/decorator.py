@@ -72,11 +72,14 @@ def _validate_body_style(kparams):
         _body_style = 'wrapped'
     elif not (_body_style in ('wrapped', 'bare')):
         raise ValueError("body_style must be one of ('wrapped', 'bare')")
-    elif _soap_body_style == 'document':
+
+    if _soap_body_style == 'document':
+        assert _body_style is None, "You should not set both 'body_style' and '_soap_body_style'"
         _body_style = 'bare'
     elif _soap_body_style == 'rpc':
+        assert _body_style is None, "You should not set both 'body_style' and '_soap_body_style'"
         _body_style = 'wrapped'
-    else:
+    elif _soap_body_style is not None:
         raise ValueError("soap_body_style must be one of ('rpc', 'document')")
 
     assert _body_style in ('wrapped','bare')
