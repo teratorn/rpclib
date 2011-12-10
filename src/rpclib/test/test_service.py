@@ -153,17 +153,17 @@ class TestMultiple(unittest.TestCase):
         self.app.interface.build_interface_document('url')
 
     def test_multiple_return(self):
-        message_class = MultipleReturnService.public_methods.values()[0].out_message
+        message_class = list(MultipleReturnService.public_methods.values())[0].out_message
         message = message_class()
 
         self.assertEquals(len(message._type_info), 3)
 
         sent_xml = etree.Element('test')
-        self.app.out_protocol.to_parent_element(message_class, ('a','b','c'),
+        self.app.out_protocol.to_parent_element(message_class, ('a', 'b', 'c'),
                                     MultipleReturnService.get_tns(), sent_xml)
         sent_xml = sent_xml[0]
 
-        print etree.tostring(sent_xml, pretty_print=True)
+        print((etree.tostring(sent_xml, pretty_print=True)))
         response_data = self.app.out_protocol.from_element(message_class, sent_xml)
 
         self.assertEquals(len(response_data), 3)

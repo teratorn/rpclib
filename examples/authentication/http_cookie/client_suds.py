@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: utf8
+#encoding: utf8
 #
 # Copyright © Burak Arslan <burak at arskom dot com dot tr>,
 #             Arskom Ltd. http://www.arskom.com.tr
@@ -29,42 +29,22 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-from rpclib.application import Application
-from rpclib.decorator import srpc
-from rpclib.interface.wsdl import Wsdl11
-from rpclib.protocol.soap import Soap11
-from rpclib.service import ServiceBase
-from rpclib.model.complex import Array
-from rpclib.model.primitive import Integer
-from rpclib.model.primitive import String
-from rpclib.server.wsgi import WsgiApplication
-from rpclib.util.wsgi_wrapper import run_twisted
+from suds import WebFault
+from suds.client import Client
 
-'''
-This is the HelloWorld example running in the twisted framework.
-'''
+c = Client('http://localhost:7789/app/?wsdl')
 
-class HelloWorldService(ServiceBase):
-    @srpc(String, Integer, _returns=Array(String))
-    def say_hello(name, times):
-        '''Docstrings for service methods appear as documentation in the wsdl.
+user_name = 'neo'
 
-        @param name the name to say hello to
-        @param the number of times to say hello
-        @return the completed array
-        '''
-        results = []
-        for i in range(0, times):
-            results.append('Hello, %s' % name)
+c.service.authenticate(user_name, 'Wh1teR@bbit')
 
-        return results
+print c.service.get_preferences('neo')
+try:
+    print c.service.get_preferences('trinity')
+except WebFault, e:
+    print e
 
-if __name__=='__main__':
-    application = Application([HelloWorldService], 'rpclib.examples.hello.twisted',
-                interface=Wsdl11(), in_protocol=Soap11(), out_protocol=Soap11())
-    wsgi_app = WsgiApplication(application)
-
-    print('listening on 0.0.0.0:7789')
-    print('wsdl is at: http://0.0.0.0:7789/app/?wsdl')
-
-    run_twisted( ( (wsgi_app, "app"),), 7789)
+try:
+    print c.service.get_preferences('smith')
+except WebFault, e:
+    print e

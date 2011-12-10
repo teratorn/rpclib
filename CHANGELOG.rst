@@ -2,10 +2,22 @@
 Changelog
 =========
 
-rpclib-2.4.4-beta
+rpclib-2.4.8-beta
+-----------------
+ * Added rpclib.util.simple module
+ * Some work towards Python-3 support.
+
+rpclib-2.4.7-beta
+-----------------
+ * Made color in logs optional
+ * Fixed ByteArray serializer
+
+rpclib-2.4.5-beta
 -----------------
  * Time primitive was implemented.
  * Fix for multiple ports was integrated.
+ * Added http cookie authentication example with suds.
+ * Full change log: https://github.com/arskom/rpclib/pull/109
 
 rpclib-2.4.3-beta
 -----------------

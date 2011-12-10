@@ -71,14 +71,14 @@ def _parse_xml_string(xml_string, charset=None):
         if charset is None:
             charset = 'utf-8'
 
-        xml_string = ''.join(xml_string)
+        xml_string = ''.join([s.decode(charset) for s in xml_string])
 
         try:
-            root, xmlids = etree.XMLID(xml_string.decode(charset))
-        except XMLSyntaxError,e:
-            raise Fault('Client.XMLSyntaxError',str(e))
+            root, xmlids = etree.XMLID(xml_string)
+        except XMLSyntaxError, e:
+            raise Fault('Client.XMLSyntaxError', str(e))
 
-    except ValueError,e:
+    except ValueError, e:
         logger.debug('%s -- falling back to str decoding.' % (e))
         root, xmlids = etree.XMLID(xml_string)
 
@@ -172,7 +172,7 @@ class Soap11(XmlObject):
         Not meant to be overridden.
         """
 
-        assert message in ('request','response')
+        assert message in ('request', 'response')
 
         self.event_manager.fire_event('before_deserialize', ctx)
 
@@ -308,7 +308,7 @@ class Soap11(XmlObject):
             logger.debug(etree.tostring(ctx.out_document,
                                         xml_declaration=True, pretty_print=True))
 
-        self.event_manager.fire_event('after_serialize',ctx)
+        self.event_manager.fire_event('after_serialize', ctx)
 
     def fault_to_http_response_code(self, fault):
         return HTTP_500

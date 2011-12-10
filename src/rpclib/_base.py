@@ -180,8 +180,7 @@ class MethodContext(object):
         for k, v in self.__dict__.items():
             if isinstance(v, dict):
                 ret = deque(['{'])
-                items = v.items()
-                items.sort()
+                items = sorted(v.items())
                 for k2, v2 in items:
                     ret.append('\t\t%r: %r,' % (k2, v2))
                 ret.append('\t}')
@@ -203,9 +202,11 @@ class MethodDescriptor(object):
     def __init__(self, function, in_message, out_message, doc,
                  is_callback=False, is_async=False, mtom=False, in_header=None,
                  out_header=None, faults=None,
-                 port_type=None, no_ctx=False, udp=None):
+                 port_type=None, no_ctx=False, udp=None, class_key=None):
 
-        self.function = function
+        self.__real_function = function
+        self.reset_function()
+
         """The original function object to be called when the method is remotely
         invoked."""
 
@@ -246,6 +247,9 @@ class MethodDescriptor(object):
         """Short for "User-Defined Properties", it's your own playground. You
         can use it to store custom metadata about the method."""
 
+        self.class_key = class_key
+        """The name the function is accessible from in the class."""
+
     @property
     def name(self):
         """The public name of the function. Equals to the type_name of the
@@ -260,6 +264,12 @@ class MethodDescriptor(object):
 
         return '{%s}%s' % (
             self.in_message.get_namespace(), self.in_message.get_type_name())
+
+    def reset_function(self, val=None):
+        if val != None:
+            self.__real_function = val
+        self.function = self.__real_function
+
 
 class EventManager(object):
     """The event manager for all rpclib events. The events are stored in an

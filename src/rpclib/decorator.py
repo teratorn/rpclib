@@ -82,7 +82,7 @@ def _validate_body_style(kparams):
     elif _soap_body_style is not None:
         raise ValueError("soap_body_style must be one of ('rpc', 'document')")
 
-    assert _body_style in ('wrapped','bare')
+    assert _body_style in ('wrapped', 'bare')
 
     return _body_style
 
@@ -108,7 +108,7 @@ def _produce_output_message(f, func_name, kparams):
 
             assert (len(_returns) == len(_out_variable_names))
 
-            var_pair = zip(_out_variable_names,_returns)
+            var_pair = zip(_out_variable_names, _returns)
             out_params = TypeInfo(var_pair)
 
         else:
@@ -183,7 +183,8 @@ def srpc(*params, **kparams):
             retval = MethodDescriptor(f,
                     in_message, out_message, doc, _is_callback, _is_async,
                     _mtom, _in_header, _out_header, _faults,
-                    port_type=_port_type, no_ctx=_no_ctx, udp=_udp)
+                    port_type=_port_type, no_ctx=_no_ctx, udp=_udp,
+                    class_key=function_name)
 
             return retval
 

@@ -23,8 +23,13 @@ logger = logging.getLogger('rpclib.protocol.xml')
 from lxml import etree
 
 from rpclib.const import xml_ns as ns
+from rpclib.const.ansi_color import LIGHT_GREEN
+from rpclib.const.ansi_color import LIGHT_RED
+from rpclib.const.ansi_color import END_COLOR
+
 from rpclib.util.cdict import cdict
 from rpclib.model import ModelBase
+from rpclib.model.binary import ByteArray
 from rpclib.model.binary import Attachment
 from rpclib.model.complex import Array
 from rpclib.model.complex import Iterable
@@ -72,6 +77,7 @@ class XmlObject(ProtocolBase):
 
         self.serialization_handlers = cdict({
             ModelBase: base_to_parent_element,
+            ByteArray: binary_to_parent_element,
             Attachment: binary_to_parent_element,
             ComplexModelBase: complex_to_parent_element,
             Fault: fault_to_parent_element,
@@ -82,6 +88,7 @@ class XmlObject(ProtocolBase):
 
         self.deserialization_handlers = cdict({
             ModelBase: base_from_element,
+            ByteArray: binary_from_element,
             Attachment: binary_from_element,
             ComplexModelBase: complex_from_element,
             Fault: fault_from_element,
@@ -122,8 +129,8 @@ class XmlObject(ProtocolBase):
         try:
             self.validate_document(body_document)
             ctx.method_request_string = body_document.tag
-            logger.debug("\033[92mMethod request_string: %r\033[0m" %
-                                                    ctx.method_request_string)
+            logger.debug("%sMethod request string: %r%s" %
+                           (LIGHT_GREEN, ctx.method_request_string, END_COLOR))
         finally:
             if self.log_messages:
                 logger.debug(etree.tostring(ctx.in_document, pretty_print=True))
@@ -139,8 +146,9 @@ class XmlObject(ProtocolBase):
 
         self.validate_body(ctx, ctx.in_document)
 
+    def decompose_incoming_envelope(self, ctx):
         ctx.in_header_doc = None # If you need header support, you should use Soap
-        ctx.in_body_doc = ctx.in_body_doc
+        ctx.in_body_doc = ctx.in_document
 
     def create_out_string(self, ctx, charset=None):
         """Sets an iterable of string fragments to ctx.out_string"""
@@ -176,7 +184,7 @@ class XmlObject(ProtocolBase):
             ctx.in_object = [None] * len(body_class._type_info)
 
         if self.log_messages:
-            logger.debug('\033[91m' + "Response" + '\033[0m')
+            logger.debug(LIGHT_RED + "Response" + END_COLOR)
             logger.debug(etree.tostring(ctx.out_document,
                                         xml_declaration=True, pretty_print=True))
 
